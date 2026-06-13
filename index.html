@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vasya Pechen — игры для TikTok Live</title>
+<meta name="description" content="Игры для TikTok Live на подарках: зрители шлют подарки за свою страну, флаги сражаются прямо на стриме.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>">
+<style>
+  :root{
+    --bg:#0d0b14; --bg2:#14111f; --card:#1a1626; --card2:#221c33;
+    --line:#2c2640; --fire:#ff6a00; --fire2:#ff9d2f; --gold:#ffd24a;
+    --txt:#f3f0fb; --mut:#a59fc0; --ok:#3ddc84;
+    --grad:linear-gradient(135deg,#ff6a00,#ff2e63);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    line-height:1.55;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+  section{padding:84px 0}
+  h1,h2,h3{line-height:1.12;letter-spacing:-.02em}
+  .eyebrow{color:var(--fire2);font-weight:700;text-transform:uppercase;
+    letter-spacing:.14em;font-size:13px;margin-bottom:14px}
+  .muted{color:var(--mut)}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* header */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(13,11,20,.72);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;gap:18px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+  .brand .logo{width:34px;height:34px;border-radius:9px;background:var(--grad);
+    display:grid;place-items:center;font-size:19px}
+  .nav .links{display:flex;gap:26px;margin-left:24px}
+  .nav .links a{color:var(--mut);font-size:15px;font-weight:600;transition:.2s}
+  .nav .links a:hover{color:var(--txt)}
+  .nav .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .lang{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .lang button{background:transparent;color:var(--mut);border:0;padding:7px 11px;
+    font-weight:700;cursor:pointer;font-size:13px}
+  .lang button.on{background:var(--fire);color:#1a0e00}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:9px;border:0;cursor:pointer;
+    font-family:inherit;font-weight:800;border-radius:12px;padding:14px 24px;
+    font-size:16px;transition:transform .12s,box-shadow .2s;white-space:nowrap}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-fire{background:var(--grad);color:#fff;box-shadow:0 8px 26px rgba(255,80,20,.36)}
+  .btn-ghost{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
+  .btn-sm{padding:10px 16px;font-size:14px;border-radius:10px}
+
+  /* hero */
+  .hero{position:relative;padding:96px 0 70px;text-align:center;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-30% 0 auto 0;height:620px;
+    background:radial-gradient(60% 50% at 50% 0,rgba(255,106,0,.22),transparent 70%);
+    pointer-events:none}
+  .hero h1{font-size:clamp(38px,6.2vw,72px);font-weight:900;margin:8px 0 18px}
+  .hero p.lead{font-size:clamp(17px,2.2vw,21px);color:var(--mut);
+    max-width:680px;margin:0 auto 32px}
+  .hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .hero .note{margin-top:16px;font-size:13px;color:var(--mut)}
+  .marquee{margin-top:54px;display:flex;gap:0;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .marquee .row{display:flex;gap:14px;font-size:38px;animation:scroll 28s linear infinite;padding-right:14px}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* steps */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+  .step .n{width:42px;height:42px;border-radius:11px;background:var(--card2);
+    display:grid;place-items:center;font-size:22px;margin-bottom:16px}
+  .step h3{font-size:19px;margin-bottom:8px}
+  .step p{color:var(--mut);font-size:15px}
+
+  /* games */
+  .games{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .game{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);
+    background:var(--card);transition:transform .18s,border-color .2s}
+  .game:hover{transform:translateY(-4px);border-color:var(--fire)}
+  .game .top{height:150px;display:grid;place-items:center;font-size:64px;position:relative}
+  .game.g1 .top{background:linear-gradient(135deg,#3a1d00,#7a2a00)}
+  .game.g2 .top{background:linear-gradient(135deg,#1d1030,#4a1b5e)}
+  .game.g3 .top{background:linear-gradient(135deg,#06281f,#0a4b39)}
+  .game .body{padding:20px}
+  .game h3{font-size:21px;margin-bottom:6px}
+  .game p{color:var(--mut);font-size:14.5px;min-height:42px}
+  .tag{position:absolute;top:12px;right:12px;font-size:11px;font-weight:800;
+    padding:5px 9px;border-radius:7px;text-transform:uppercase;letter-spacing:.06em}
+  .tag.live{background:var(--ok);color:#062b16}
+  .tag.soon{background:var(--gold);color:#3a2c00}
+
+  /* pricing */
+  .plans{display:grid;grid-template-columns:repeat(2,minmax(0,360px));gap:22px;align-items:stretch;justify-content:center}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 26px;display:flex;flex-direction:column}
+  .plan.feat{border-color:var(--fire);box-shadow:0 14px 40px rgba(255,80,20,.16);position:relative}
+  .plan.feat::after{content:attr(data-badge);position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+    background:var(--grad);color:#fff;font-size:11px;font-weight:800;padding:5px 13px;border-radius:20px;letter-spacing:.05em}
+  .plan h3{font-size:22px;margin-bottom:6px}
+  .plan .price{font-size:34px;font-weight:900;margin:8px 0 4px}
+  .plan .price span{font-size:15px;color:var(--mut);font-weight:600}
+  .plan ul{list-style:none;margin:18px 0 24px;display:flex;flex-direction:column;gap:11px}
+  .plan li{display:flex;gap:9px;color:var(--mut);font-size:15px}
+  .plan li b{color:var(--txt);font-weight:600}
+  .plan li::before{content:"✓";color:var(--ok);font-weight:900}
+  .plan .btn{margin-top:auto;justify-content:center}
+
+  /* download band */
+  .band{background:linear-gradient(135deg,#1b1226,#241326);border:1px solid var(--line);
+    border-radius:24px;padding:48px;text-align:center}
+  .band h2{font-size:clamp(26px,4vw,40px);margin-bottom:12px}
+  .band .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+  .req{margin-top:18px;font-size:13px;color:var(--mut)}
+
+  /* faq */
+  .faq{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 20px}
+  summary{cursor:pointer;font-weight:700;font-size:16.5px;padding:16px 0;list-style:none;
+    display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--fire2);font-size:22px;font-weight:700}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--mut);padding:0 0 18px;font-size:15px}
+
+  .center{text-align:center}
+  h2.sec{font-size:clamp(28px,4.4vw,44px);font-weight:900;text-align:center;margin-bottom:10px}
+  p.sub{text-align:center;color:var(--mut);max-width:620px;margin:0 auto 50px;font-size:17px}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--mut);font-size:14px}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+
+  @media(max-width:880px){
+    .nav .links{display:none}
+    .grid3,.games,.plans{grid-template-columns:1fr}
+    section{padding:60px 0}
+    .band{padding:32px 20px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="brand"><span class="logo">🏁</span> Vasya Pechen</a>
+    <nav class="links">
+      <a href="#how" data-i="nav_how">Как работает</a>
+      <a href="#games" data-i="nav_games">Игры</a>
+      <a href="#pricing" data-i="nav_price">Тарифы</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="right">
+      <div class="lang">
+        <button id="lng-ru" class="on" onclick="setLang('ru')">RU</button>
+        <button id="lng-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a class="btn btn-fire btn-sm" href="#download" data-i="nav_dl">Скачать</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow" data-i="hero_eyebrow">Игры для TikTok Live</div>
+    <h1><span data-i="hero_t1">Подарки зрителей —</span><br><span class="grad-text" data-i="hero_t2">в битву флагов на стриме</span></h1>
+    <p class="lead" data-i="hero_lead">Зрители шлют подарки за свою страну — флаги сражаются прямо у тебя в прямом эфире. Подключается за пару минут через TikFinity или Stream2Earn.</p>
+    <div class="cta">
+      <a class="btn btn-fire" id="dl1" href="#" data-i="btn_dl">⬇ Скачать лаунчер</a>
+      <a class="btn btn-ghost" id="pat1" href="#" target="_blank" rel="noopener" data-i="btn_pat">★ Оформить на Patreon</a>
+    </div>
+    <div class="note" data-i="hero_note">Windows · бесплатный лаунчер · игры по подписке Patreon</div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how">
+  <div class="wrap">
+    <h2 class="sec" data-i="how_h">Как это работает</h2>
+    <p class="sub" data-i="how_sub">Три шага — и у тебя на стриме интерактивная игра, которой управляют зрители подарками.</p>
+    <div class="grid3">
+      <div class="step"><div class="n">⚙️</div><h3 data-i="how1_h">Установи лаунчер</h3><p data-i="how1_p">Скачай лаунчер, войди через Patreon — внутри все твои игры, обновления приходят сами.</p></div>
+      <div class="step"><div class="n">🔗</div><h3 data-i="how2_h">Подключи подарки</h3><p data-i="how2_p">В TikFinity или Stream2Earn вешаешь на подарок веб-запрос — за пару минут по инструкции в игре.</p></div>
+      <div class="step"><div class="n">🎁</div><h3 data-i="how3_h">Запусти на стриме</h3><p data-i="how3_p">Зритель шлёт подарок за страну — флаг получает силу, ракеты, бойцов. Аудитория втягивается и донатит.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section id="games">
+  <div class="wrap">
+    <h2 class="sec" data-i="games_h">Игры</h2>
+    <p class="sub" data-i="games_sub">Все игры — в одном лаунчере. Новые добавляются, обновления автоматические.</p>
+    <div class="games">
+      <div class="game g1">
+        <div class="top">🏁<span class="tag live" data-i="tag_live">В игре</span></div>
+        <div class="body"><h3>Flag Race</h3><p data-i="g_race">Гонка стран: танки-флаги мчат к финишу, подарки дают HP, ускорение и залпы ракет.</p></div>
+      </div>
+      <div class="game g2">
+        <div class="top">⚔️<span class="tag live" data-i="tag_live2">В игре</span></div>
+        <div class="body"><h3>Flag War</h3><p data-i="g_war">Битва флагов: лечи свою страну, атакуй другие ракетами. Последний выживший побеждает.</p></div>
+      </div>
+      <div class="game g3">
+        <div class="top">🏃<span class="tag soon" data-i="tag_soon">Скоро</span></div>
+        <div class="body"><h3>Flag Run 3D</h3><p data-i="g_run">3D-забег стран: бегуны соревнуются и дерутся, подарок выводит бойца твоей страны на трассу.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap">
+    <h2 class="sec" data-i="price_h">Тарифы</h2>
+    <p class="sub" data-i="price_sub">Лаунчер бесплатный. Доступ к играм — по подписке Patreon. Отменить можно в любой момент.</p>
+    <div class="plans">
+      <div class="plan feat" data-badge="POPULAR">
+        <h3>Pro</h3>
+        <div class="price">$39.99 <span data-i="pm">/мес</span></div>
+        <ul>
+          <li><b>Flag Race + Flag War</b></li>
+          <li><b data-i="pf_all">Все текущие игры</b></li>
+          <li data-i="pf_upd">Автообновления</li>
+          <li data-i="pf_media">Свои картинки и звуки</li>
+          <li data-i="pf_supp">Поддержка</li>
+        </ul>
+        <a class="btn btn-fire pat" href="#" target="_blank" data-i="pf_choose">Выбрать</a>
+      </div>
+      <div class="plan" data-badge2="MAX">
+        <h3>Pro Max</h3>
+        <div class="price">$99.99 <span data-i="pm2">/мес</span></div>
+        <ul>
+          <li><b data-i="pf_every">Все игры</b></li>
+          <li data-i="pf_early">Ранний доступ к новинкам</li>
+          <li data-i="pf_upd2">Автообновления</li>
+          <li data-i="pf_prio">Приоритетная поддержка</li>
+        </ul>
+        <a class="btn btn-ghost pat" href="#" target="_blank" data-i="pf_choose2">Выбрать</a>
+      </div>
+    </div>
+    <p class="center muted" style="margin-top:22px;font-size:13px" data-i="price_note">Цены уточняются — итоговые суммы смотри на странице Patreon.</p>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download">
+  <div class="wrap">
+    <div class="band">
+      <h2 data-i="dl_h">Начни прямо сейчас</h2>
+      <p class="muted" data-i="dl_p">Скачай бесплатный лаунчер и оформи подписку — игры появятся внутри.</p>
+      <div class="cta">
+        <a class="btn btn-fire" id="dl2" href="#" data-i="btn_dl2">⬇ Скачать лаунчер</a>
+        <a class="btn btn-ghost" id="pat2" href="#" target="_blank" rel="noopener" data-i="btn_pat2">★ Оформить на Patreon</a>
+      </div>
+      <div class="req" data-i="dl_req">Windows 10/11 · ~30 МБ · установщик с мастером и ярлыком</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <h2 class="sec">FAQ</h2>
+    <p class="sub" data-i="faq_sub">Короткие ответы на частые вопросы.</p>
+    <div class="faq">
+      <details><summary data-i="q1">Сколько стоит и где платить?</summary><p data-i="a1">Лаунчер бесплатный. Доступ к играм — по подписке Patreon, оформляется на странице Patreon. Отменить можно в любой момент.</p></details>
+      <details><summary data-i="q2">Как подключить подарки TikTok?</summary><p data-i="a2">Через TikFinity или Stream2Earn: на подарок вешается веб-запрос (вебхук) на адрес игры. Точная инструкция с примерами есть прямо в игре.</p></details>
+      <details><summary data-i="q3">Что нужно для запуска?</summary><p data-i="a3">Windows 10/11 и браузер (Chrome или Edge). Игра открывается как окно, его удобно захватить в OBS.</p></details>
+      <details><summary data-i="q4">Настройки сохраняются?</summary><p data-i="a4">Да. Выбор стран, картинки, звуки и параметры хранятся рядом с игрой и переживают перезапуск и обновления.</p></details>
+      <details><summary data-i="q5">Лаунчер обновляется сам?</summary><p data-i="a5">Да, лаунчер и игры обновляются автоматически — всегда последняя версия без ручных скачиваний.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>© <span id="yr"></span> Vasya Pechen · <span data-i="rights">Все права защищены</span></div>
+    <div style="display:flex;gap:18px">
+      <a href="#games" data-i="nav_games2">Игры</a>
+      <a id="pat3" href="#" target="_blank" rel="noopener">Patreon</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── ссылки ──
+  var DL = "https://github.com/vasyapechen/launcher/releases/latest/download/VasyaLauncher-Setup.exe";
+  var PAT = "https://www.patreon.com/cw/vasya_pechen/membership";
+  ["dl1","dl2"].forEach(function(id){document.getElementById(id).href=DL;});
+  ["pat1","pat2","pat3"].forEach(function(id){document.getElementById(id).href=PAT;});
+  document.querySelectorAll("a.pat").forEach(function(a){a.href=PAT;});
+  document.getElementById("yr").textContent=new Date().getFullYear();
+
+  // ── i18n ──
+  var I={
+    nav_how:["Как работает","How it works"],nav_games:["Игры","Games"],nav_price:["Тарифы","Pricing"],
+    nav_dl:["Скачать","Download"],nav_games2:["Игры","Games"],
+    hero_eyebrow:["Игры для TikTok Live","Games for TikTok Live"],
+    hero_t1:["Подарки зрителей —","Viewer gifts —"],
+    hero_t2:["в битву флагов на стриме","into a flag battle on your stream"],
+    hero_lead:["Зрители шлют подарки за свою страну — флаги сражаются прямо у тебя в прямом эфире. Подключается за пару минут через TikFinity или Stream2Earn.",
+      "Viewers send gifts for their country — flags battle live on your stream. Set up in minutes via TikFinity or Stream2Earn."],
+    btn_dl:["⬇ Скачать лаунчер","⬇ Download launcher"],btn_pat:["★ Оформить на Patreon","★ Get it on Patreon"],
+    hero_note:["Windows · бесплатный лаунчер · игры по подписке Patreon","Windows · free launcher · games via Patreon"],
+    how_h:["Как это работает","How it works"],
+    how_sub:["Три шага — и у тебя на стриме интерактивная игра, которой управляют зрители подарками.",
+      "Three steps to a live game your viewers control with gifts."],
+    how1_h:["Установи лаунчер","Install the launcher"],how1_p:["Скачай лаунчер, войди через Patreon — внутри все твои игры, обновления приходят сами.","Download the launcher, sign in with Patreon — all your games inside, auto-updated."],
+    how2_h:["Подключи подарки","Connect gifts"],how2_p:["В TikFinity или Stream2Earn вешаешь на подарок веб-запрос — за пару минут по инструкции в игре.","In TikFinity or Stream2Earn attach a webhook to a gift — minutes, with the in-game guide."],
+    how3_h:["Запусти на стриме","Go live"],how3_p:["Зритель шлёт подарок за страну — флаг получает силу, ракеты, бойцов. Аудитория втягивается и донатит.","A viewer gifts for a country — its flag gets power, rockets, fighters. Your audience joins in and donates."],
+    games_h:["Игры","Games"],games_sub:["Все игры — в одном лаунчере. Новые добавляются, обновления автоматические.","All games in one launcher. New ones added, updates automatic."],
+    tag_live:["В игре","Live"],tag_live2:["В игре","Live"],tag_soon:["Скоро","Soon"],
+    g_race:["Гонка стран: танки-флаги мчат к финишу, подарки дают HP, ускорение и залпы ракет.","Country race: flag tanks rush to the finish; gifts add HP, speed and rocket salvos."],
+    g_war:["Битва флагов: лечи свою страну, атакуй другие ракетами. Последний выживший побеждает.","Flag battle: heal your country, attack others with rockets. Last one standing wins."],
+    g_run:["3D-забег стран: бегуны соревнуются и дерутся, подарок выводит бойца твоей страны на трассу.","3D country run: runners race and fight; a gift sends your country's fighter onto the track."],
+    price_h:["Тарифы","Pricing"],price_sub:["Лаунчер бесплатный. Доступ к играм — по подписке Patreon. Отменить можно в любой момент.","The launcher is free. Game access via Patreon. Cancel anytime."],
+    pm:["/мес","/mo"],pm2:["/мес","/mo"],
+    pf_all:["Все текущие игры","All current games"],pf_upd:["Автообновления","Auto-updates"],pf_media:["Свои картинки и звуки","Custom images & sounds"],pf_supp:["Поддержка","Support"],pf_choose:["Выбрать","Choose"],
+    pf_every:["Все игры","All games"],pf_early:["Ранний доступ к новинкам","Early access to new games"],pf_upd2:["Автообновления","Auto-updates"],pf_prio:["Приоритетная поддержка","Priority support"],pf_choose2:["Выбрать","Choose"],
+    per:["/мес","/mo"],per2:["/мес","/mo"],per3:["/мес","/mo"],
+    p_upd:["Автообновления","Auto-updates"],p_panels:["Свои картинки и звуки","Custom images & sounds"],
+    p_all_cur:["Все текущие игры","All current games"],p_upd2:["Автообновления","Auto-updates"],p_prio:["Приоритетная поддержка","Priority support"],
+    p_everything:["Все игры","All games"],p_early:["Ранний доступ к новинкам","Early access to new games"],p_upd3:["Автообновления","Auto-updates"],p_prio2:["Приоритетная поддержка","Priority support"],
+    p_choose:["Выбрать","Choose"],p_choose2:["Выбрать","Choose"],p_choose3:["Выбрать","Choose"],
+    price_note:["Цены уточняются — итоговые суммы смотри на странице Patreon.","Final prices are on the Patreon page."],
+    dl_h:["Начни прямо сейчас","Get started now"],dl_p:["Скачай бесплатный лаунчер и оформи подписку — игры появятся внутри.","Download the free launcher and subscribe — games appear inside."],
+    btn_dl2:["⬇ Скачать лаунчер","⬇ Download launcher"],btn_pat2:["★ Оформить на Patreon","★ Get it on Patreon"],
+    dl_req:["Windows 10/11 · ~30 МБ · установщик с мастером и ярлыком","Windows 10/11 · ~30 MB · wizard installer with shortcut"],
+    faq_sub:["Короткие ответы на частые вопросы.","Quick answers to common questions."],
+    q1:["Сколько стоит и где платить?","How much and where to pay?"],a1:["Лаунчер бесплатный. Доступ к играм — по подписке Patreon, оформляется на странице Patreon. Отменить можно в любой момент.","The launcher is free. Game access is via a Patreon subscription on the Patreon page. Cancel anytime."],
+    q2:["Как подключить подарки TikTok?","How to connect TikTok gifts?"],a2:["Через TikFinity или Stream2Earn: на подарок вешается веб-запрос (вебхук) на адрес игры. Точная инструкция с примерами есть прямо в игре.","Via TikFinity or Stream2Earn: attach a webhook to a gift pointing at the game. A step-by-step guide is inside the game."],
+    q3:["Что нужно для запуска?","What do I need to run it?"],a3:["Windows 10/11 и браузер (Chrome или Edge). Игра открывается как окно, его удобно захватить в OBS.","Windows 10/11 and a browser (Chrome or Edge). The game opens as a window, easy to capture in OBS."],
+    q4:["Настройки сохраняются?","Are settings saved?"],a4:["Да. Выбор стран, картинки, звуки и параметры хранятся рядом с игрой и переживают перезапуск и обновления.","Yes. Country selection, images, sounds and options are stored next to the game and survive restarts and updates."],
+    q5:["Лаунчер обновляется сам?","Does the launcher auto-update?"],a5:["Да, лаунчер и игры обновляются автоматически — всегда последняя версия без ручных скачиваний.","Yes — the launcher and games update automatically, always the latest version."],
+    rights:["Все права защищены","All rights reserved"]
+  };
+  function setLang(l){
+    var i=l==="en"?1:0;
+    document.documentElement.lang=l;
+    for(var k in I){var el=document.querySelector('[data-i="'+k+'"]');if(el)el.textContent=I[k][i];}
+    document.querySelectorAll('[data-i]').forEach(function(e){var k=e.getAttribute('data-i');if(I[k])e.textContent=I[k][i];});
+    document.getElementById('lng-ru').classList.toggle('on',l==='ru');
+    document.getElementById('lng-en').classList.toggle('on',l==='en');
+    try{localStorage.setItem('site_lang',l);}catch(e){}
+  }
+  var saved=null;try{saved=localStorage.getItem('site_lang');}catch(e){}
+  var def=((navigator.language||'ru').slice(0,2)==='ru')?'ru':'en';
+  setLang(saved||def);
+</script>
+</body>
+</html>
