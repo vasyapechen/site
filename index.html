@@ -93,6 +93,11 @@
     padding:5px 9px;border-radius:7px;text-transform:uppercase;letter-spacing:.06em}
   .tag.live{background:var(--ok);color:#062b16}
   .tag.soon{background:var(--gold);color:#3a2c00}
+  .g-tags{position:absolute;top:12px;right:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:84%}
+  .g-tags .tag{position:static}
+  .tag.early{background:var(--fire);color:#fff}
+  .tag.pro{background:#241d38;color:#cbd0ec;border:1px solid var(--line)}
+  .tag.promax{background:linear-gradient(135deg,var(--gold),#ffb020);color:#3a2c00}
 
   /* pricing */
   .plans{display:grid;grid-template-columns:repeat(2,minmax(0,360px));gap:22px;align-items:stretch;justify-content:center}
@@ -342,7 +347,18 @@
   var GEMOJI={flagrace:"🏁",flagwar:"⚔️",flagrun:"🏃"};
   var GAMES=null;
   function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-  function isNewGame(g){return g.is_new===true||String(g.is_new).toLowerCase()==="true";}
+  // Статус игры как в PechenFlow: «Ранний доступ» (пока today < released + early_access_days) + тариф Pro/Pro Max.
+  function gameBadges(g,en){
+    var days=parseInt(g.early_access_days,10)||14, early=false;
+    if(g.released){ var end=new Date(g.released); if(!isNaN(end.getTime())){ end.setDate(end.getDate()+days); early=new Date()<end; } }
+    var list=(g.tiers_required||[]).map(function(x){return String(x).toLowerCase();});
+    var proMaxOnly=list.length && list.indexOf("pro")<0 && list.indexOf("basic")<0;  // доступна только Pro Max
+    var promax=early||proMaxOnly;
+    var out=[];
+    if(early) out.push('<span class="tag early">'+(en?"Early access":"Ранний доступ")+'</span>');
+    out.push('<span class="tag '+(promax?"promax":"pro")+'">'+(promax?"Pro Max":"Pro")+'</span>');
+    return '<div class="g-tags">'+out.join("")+'</div>';
+  }
   function renderGames(){
     var grid=document.getElementById("gamesGrid");
     if(!grid||!GAMES||!GAMES.length)return;
@@ -350,9 +366,8 @@
     grid.innerHTML=GAMES.map(function(g,i){
       var desc=(en&&g.description_en)?g.description_en:(g.description||"");
       var thumb=g.thumbnail?('<img src="'+esc(g.thumbnail)+'" alt=""/>'):(GEMOJI[g.id]||"🎮");
-      var badge=isNewGame(g)?'<span class="tag live">NEW</span>':"";
       var ver=g.version?(' <span class="g-ver">v'+esc(g.version)+'</span>'):"";
-      return '<div class="game g'+((i%3)+1)+'"><div class="top">'+thumb+badge+'</div>'
+      return '<div class="game g'+((i%3)+1)+'"><div class="top">'+thumb+gameBadges(g,en)+'</div>'
         +'<div class="body"><h3>'+esc(g.name)+ver+'</h3><p>'+esc(desc)+'</p></div></div>';
     }).join("");
   }
