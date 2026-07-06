@@ -86,6 +86,8 @@
   .game.g3 .top{background:linear-gradient(135deg,#06281f,#0a4b39)}
   .game .body{padding:20px}
   .game h3{font-size:21px;margin-bottom:6px}
+  .game h3 .g-ver{font-size:12px;color:var(--mut);font-weight:700;margin-left:7px;vertical-align:middle}
+  .game .top img{width:100%;height:100%;object-fit:cover;display:block}
   .game p{color:var(--mut);font-size:14.5px;min-height:42px}
   .tag{position:absolute;top:12px;right:12px;font-size:11px;font-weight:800;
     padding:5px 9px;border-radius:7px;text-transform:uppercase;letter-spacing:.06em}
@@ -192,7 +194,7 @@
   <div class="wrap">
     <h2 class="sec" data-i="games_h">Игры</h2>
     <p class="sub" data-i="games_sub">Все игры — в одном приложении PechenFlow. Новые добавляются, обновления автоматические.</p>
-    <div class="games">
+    <div class="games" id="gamesGrid">
       <div class="game g1">
         <div class="top">🏁<span class="tag live" data-i="tag_live">В игре</span></div>
         <div class="body"><h3>Flag Race</h3><p data-i="g_race">Гонка стран: танки-флаги мчат к финишу, подарки дают HP, ускорение и залпы ракет.</p></div>
@@ -335,6 +337,28 @@
     q5:["PechenFlow обновляется сам?","Does PechenFlow auto-update?"],a5:["Да, PechenFlow и игры обновляются автоматически — всегда последняя версия без ручных скачиваний.","Yes — PechenFlow and the games update automatically, always the latest version."],
     rights:["Все права защищены","All rights reserved"]
   };
+  // ── игры из каталога (список/версии/описания обновляются автоматически) ──
+  var CATALOG_URL="https://raw.githubusercontent.com/vasyapechen/launcher/main/catalog.json";
+  var GEMOJI={flagrace:"🏁",flagwar:"⚔️",flagrun:"🏃"};
+  var GAMES=null;
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function isNewGame(g){return g.is_new===true||String(g.is_new).toLowerCase()==="true";}
+  function renderGames(){
+    var grid=document.getElementById("gamesGrid");
+    if(!grid||!GAMES||!GAMES.length)return;
+    var en=document.documentElement.lang==="en";
+    grid.innerHTML=GAMES.map(function(g,i){
+      var desc=(en&&g.description_en)?g.description_en:(g.description||"");
+      var thumb=g.thumbnail?('<img src="'+esc(g.thumbnail)+'" alt=""/>'):(GEMOJI[g.id]||"🎮");
+      var badge=isNewGame(g)?'<span class="tag live">NEW</span>':"";
+      var ver=g.version?(' <span class="g-ver">v'+esc(g.version)+'</span>'):"";
+      return '<div class="game g'+((i%3)+1)+'"><div class="top">'+thumb+badge+'</div>'
+        +'<div class="body"><h3>'+esc(g.name)+ver+'</h3><p>'+esc(desc)+'</p></div></div>';
+    }).join("");
+  }
+  fetch(CATALOG_URL,{cache:"no-cache"}).then(function(r){return r.json();})
+    .then(function(d){GAMES=(d&&d.games)||[];renderGames();}).catch(function(){/* оффлайн/ошибка — остаются статичные карточки */});
+
   function setLang(l){
     var i=l==="en"?1:0;
     document.documentElement.lang=l;
@@ -342,6 +366,7 @@
     document.querySelectorAll('[data-i]').forEach(function(e){var k=e.getAttribute('data-i');if(I[k])e.textContent=I[k][i];});
     document.getElementById('lng-ru').classList.toggle('on',l==='ru');
     document.getElementById('lng-en').classList.toggle('on',l==='en');
+    renderGames();   // перерисовать игры под язык (если каталог уже загружен)
     try{localStorage.setItem('site_lang',l);}catch(e){}
   }
   var saved=null;try{saved=localStorage.getItem('site_lang');}catch(e){}
